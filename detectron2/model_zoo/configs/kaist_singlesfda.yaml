@@ -1,0 +1,18 @@
+MODEL:
+  META_ARCHITECTURE: "single_sfda_RCNN"
+  WEIGHT: "/home/diml/kaist_dataset/irg-sfda/checkpoint/kaist_viz_src_person/model_13999.pth"
+  MASK_ON: False
+  RESNETS:
+    DEPTH: 50
+  ROI_HEADS:
+    NUM_CLASSES: 2
+TEST:
+  EVAL_PERIOD: 1000
+DATASETS:
+  TRAIN: ("kaist_train_tr_person",)
+  TEST: ("kaist_test_tr_person",)
+SOLVER:
+  IMS_PER_BATCH: 4
+  BASE_LR: 5e-5
+  MAX_ITER: 20000
+OUTPUT_DIR: "./checkpoint/kaist_ssfda_person_adaptive_th"

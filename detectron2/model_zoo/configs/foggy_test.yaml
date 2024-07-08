@@ -1,0 +1,16 @@
+MODEL:
+  META_ARCHITECTURE: "single_sfda_RCNN"
+  WEIGHT: "/home/diml/kaist_dataset/irg-sfda/checkpoint/cityscapes_baseline/model_final.pth"
+  #WEIGHT: "/home/diml/kaist_dataset/irg-sfda/checkpoint/foggy_singlesfda/model_10499.pth"
+  MASK_ON: False
+  RPN:
+    PRE_NMS_TOPK_TEST: 6000
+    POST_NMS_TOPK_TEST: 300
+    ANCHOR_SIZES: (128, 256, 512)
+  ROI_HEADS:
+    NUM_CLASSES: 8
+INPUT:
+  MIN_SIZE_TRAIN: (600,)
+  MIN_SIZE_TEST: 600
+DATASETS:
+  TEST: ("cityscape_2007_test_s",)

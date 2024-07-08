@@ -1,0 +1,18 @@
+MODEL:
+  META_ARCHITECTURE: "GeneralizedRCNN"
+  WEIGHT: "detectron2://ImageNetPretrained/MSRA/R-50.pkl"
+  MASK_ON: False
+  RESNETS:
+    DEPTH: 50
+  ROI_HEADS:
+    NUM_CLASSES: 2
+TEST:
+  EVAL_PERIOD: 1000
+DATASETS:
+  TRAIN: ("kaist_train_viz_person",)
+  TEST: ("kaist_test_viz_person", "kaist_test_tr_person")
+SOLVER:
+  IMS_PER_BATCH: 4
+  BASE_LR: 2e-5
+  MAX_ITER: 20000
+OUTPUT_DIR: "./checkpoint/kaist_viz"

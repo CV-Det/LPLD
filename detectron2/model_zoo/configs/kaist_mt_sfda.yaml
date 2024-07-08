@@ -1,0 +1,23 @@
+MODEL:
+  META_ARCHITECTURE: "student_sfda_RCNN"
+  WEIGHT: "detectron2://ImageNetPretrained/MSRA/R-50.pkl"
+  MASK_ON: False
+  RESNETS:
+    DEPTH: 50
+  ROI_HEADS:
+    NUM_CLASSES: 2
+TEST:
+  EVAL_PERIOD: 500
+DATASETS:
+  TRAIN: ("kaist_train_tr_person",)
+  TEST: ("kaist_test_tr_person", "kaist_test_viz_person")
+SOLVER:
+  IMS_PER_BATCH: 4
+  BASE_LR: 0.001
+  MAX_ITER: 5000
+SOURCE_FREE:
+  TYPE: True
+  MODE: True
+#INPUT:
+#  MIN_SIZE_TEST: 512
+OUTPUT_DIR: "./checkpoint/1218_threshold07_visualize"

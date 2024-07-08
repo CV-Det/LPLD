@@ -1,0 +1,30 @@
+_BASE_: "./Base-RCNN-C4.yaml"
+MODEL:
+  BACKBONE:
+    NAME: "build_vgg_backbone"
+  MASK_ON: False
+  RPN:
+    IN_FEATURES: ["vgg4"]
+  ROI_HEADS:
+    NAME: "StandardROIHeadsPseudoLab"
+    NUM_CLASSES: 8
+    IN_FEATURES: ["vgg4"]
+  ROI_BOX_HEAD:
+    NAME: "FastRCNNConvFCHead"
+    NUM_FC: 2
+    POOLER_RESOLUTION: 7
+INPUT:
+  MIN_SIZE_TRAIN: (600,)
+  MIN_SIZE_TEST: 600
+DATASETS:
+  TRAIN: ("cityscape_2007_train_t",)
+  TEST: ("cityscape_2007_test_t",)
+SOLVER:
+  BASE_LR: 0.02
+  WEIGHT_DECAY: 0.0001
+  STEPS: (60000, 80000,)
+  MAX_ITER: 100000
+  IMS_PER_BATCH: 8
+TEST:
+  EVAL_PERIOD: 2000
+OUTPUT_DIR: "vgg16_model_oracle"

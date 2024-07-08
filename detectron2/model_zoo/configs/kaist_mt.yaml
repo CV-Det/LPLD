@@ -1,0 +1,20 @@
+MODEL:
+  META_ARCHITECTURE: "student_sfda_RCNN"
+  WEIGHT: "detectron2://ImageNetPretrained/MSRA/R-50.pkl"
+  MASK_ON: False
+  RESNETS:
+    DEPTH: 50
+  ROI_HEADS:
+    NUM_CLASSES: 3
+TEST:
+  EVAL_PERIOD: 400
+DATASETS:
+  TRAIN: ("kaist_train_tr", "kaist_train_viz",)
+  TEST: ("kaist_test_tr",)
+SOLVER:
+  MAX_ITER: 70000
+  IMS_PER_BATCH: 4
+SOURCE_FREE:
+  TYPE: True
+  MODE: True
+OUTPUT_DIR: "./checkpoint/foggy"

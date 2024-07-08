@@ -1,0 +1,24 @@
+MODEL:
+  META_ARCHITECTURE: "student_sfda_RCNN"
+  WEIGHT: "detectron2://ImageNetPretrained/MSRA/R-50.pkl"
+  MASK_ON: False
+  RPN:
+    PRE_NMS_TOPK_TEST: 6000
+    POST_NMS_TOPK_TEST: 300
+    ANCHOR_SIZES: (128, 256, 512)
+  ROI_HEADS:
+    NUM_CLASSES: 8
+  RESNETS:
+    NORM: "FrozenBN" 
+    OUT_FEATURES: ["res4"]
+    DEPTH: 50
+INPUT:
+  MIN_SIZE_TRAIN: (600,)
+  MIN_SIZE_TEST: 600
+DATASETS:
+  TEST: ("flir_test",)
+  # TEST: ("kaist_test_tr_person",)
+  # TEST: ("cityscape_2007_test_t",)  
+  # TEST: ("cityscape_car_2007_test_s",)
+  # TEST: ("clipart_test",)
+  # TEST: ("watercolor_test",)

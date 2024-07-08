@@ -1,0 +1,32 @@
+_BASE_: "../Base-RCNN-C4.yaml"
+MODEL:
+  META_ARCHITECTURE: "student_sfda_RCNN"
+  BACKBONE:
+    NAME: "build_vgg_backbone"
+  MASK_ON: False
+  RPN:
+    IN_FEATURES: ["vgg4"]
+  ROI_HEADS:
+    NAME: "StandardROIHeadsPseudoLab"
+    NUM_CLASSES: 8
+    IN_FEATURES: ["vgg4"]
+  ROI_BOX_HEAD:
+    NAME: "FastRCNNConvFCHead"
+    NUM_FC: 2
+    POOLER_RESOLUTION: 7
+INPUT:
+  MIN_SIZE_TRAIN: (600,)
+  MIN_SIZE_TEST: 600
+DATASETS:
+  TRAIN: ("cityscape_2007_train_t",)
+  TEST: ("cityscape_2007_test_t",)
+SOLVER:
+  BASE_LR: 0.08
+  STEPS: ()
+  MAX_ITER: 70000
+  IMS_PER_BATCH: 1
+SOURCE_FREE:
+  TYPE: True
+  MODE: True
+VERSION: 2
+OUTPUT_DIR: "./checkpoint/foggy_vgg3"

@@ -1,0 +1,12 @@
+# ninja log v5
+6	1153	1713431586578833184	/WARNING/diml/kaist_dataset/irg-sfda/build/temp.linux-x86_64-3.6/WARNING/diml/kaist_dataset/irg-sfda/detectron2/layers/csrc/cuda_version.o	94e7604ac29bf5b2
+1	8410	1713431593834759590	/WARNING/diml/kaist_dataset/irg-sfda/build/temp.linux-x86_64-3.6/WARNING/diml/kaist_dataset/irg-sfda/detectron2/layers/csrc/cocoeval/cocoeval.o	9ff776203ea18e76
+2	8514	1713431593938758533	/WARNING/diml/kaist_dataset/irg-sfda/build/temp.linux-x86_64-3.6/WARNING/diml/kaist_dataset/irg-sfda/detectron2/layers/csrc/box_iou_rotated/box_iou_rotated_cpu.o	e8d5469ead8c360f
+1	9470	1713431594894748847	/WARNING/diml/kaist_dataset/irg-sfda/build/temp.linux-x86_64-3.6/WARNING/diml/kaist_dataset/irg-sfda/detectron2/layers/csrc/nms_rotated/nms_rotated_cpu.o	1e7e1481c8ab3ebe
+2	11611	1713431597034727160	/WARNING/diml/kaist_dataset/irg-sfda/build/temp.linux-x86_64-3.6/WARNING/diml/kaist_dataset/irg-sfda/detectron2/layers/csrc/ROIAlignRotated/ROIAlignRotated_cpu.o	1106b981eed3c743
+3	12559	1713431597982717560	/WARNING/diml/kaist_dataset/irg-sfda/build/temp.linux-x86_64-3.6/WARNING/diml/kaist_dataset/irg-sfda/detectron2/layers/csrc/deformable/deform_conv_cuda_kernel.o	a7df7b7d0a889e25
+5	13349	1713431598770709577	/WARNING/diml/kaist_dataset/irg-sfda/build/temp.linux-x86_64-3.6/WARNING/diml/kaist_dataset/irg-sfda/detectron2/layers/csrc/box_iou_rotated/box_iou_rotated_cuda.o	e6ad63ec30f7d88b
+4	13493	1713431598914708121	/WARNING/diml/kaist_dataset/irg-sfda/build/temp.linux-x86_64-3.6/WARNING/diml/kaist_dataset/irg-sfda/detectron2/layers/csrc/ROIAlignRotated/ROIAlignRotated_cuda.o	325d99ec3490db30
+3	14022	1713431599438702814	/WARNING/diml/kaist_dataset/irg-sfda/build/temp.linux-x86_64-3.6/WARNING/diml/kaist_dataset/irg-sfda/detectron2/layers/csrc/nms_rotated/nms_rotated_cuda.o	fbdfe6f26e08b739
+4	16026	1713431601442682522	/WARNING/diml/kaist_dataset/irg-sfda/build/temp.linux-x86_64-3.6/WARNING/diml/kaist_dataset/irg-sfda/detectron2/layers/csrc/deformable/deform_conv_cuda.o	617bd78ec80c03ab
+0	25245	1713431610658589302	/WARNING/diml/kaist_dataset/irg-sfda/build/temp.linux-x86_64-3.6/WARNING/diml/kaist_dataset/irg-sfda/detectron2/layers/csrc/vision.o	f8dc40221bdf288

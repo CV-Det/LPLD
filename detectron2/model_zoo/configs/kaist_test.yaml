@@ -1,0 +1,10 @@
+MODEL:
+  META_ARCHITECTURE: "single_sfda_RCNN"
+  WEIGHT: "/home/diml/kaist_dataset/irg-sfda/checkpoint/kaist_ssfda_person_retry_tau_1.5/model_16999.pth"
+  MASK_ON: False
+  RESNETS:
+    DEPTH: 50
+  ROI_HEADS:
+    NUM_CLASSES: 2
+DATASETS:
+  TEST: ("kaist_test_tr_person",)
