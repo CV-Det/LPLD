@@ -28,3 +28,50 @@ cd ..
 python -m pip install -e LPLD
 
 ```
+
+---
+
+### Dataset preparation
+- Cityscapes, FoggyCityscapes / [Download Webpage](https://www.cityscapes-dataset.com/) / [Direct Download (preprocessed)](https://drive.google.com/file/d/1A2ak_gjkSIRB9SMANGBGTmRoyB10TTdB/view?usp=sharing)
+- PASCAL_VOC / [Download Webpage](https://github.com/rbgirshick/py-faster-rcnn#beyond-the-demo-installation-for-training-and-testing-models)
+- Clipart / [Download Webpage](https://github.com/naoto0804/cross-domain-detection/tree/master/datasets) / [Direct Download (preprocessed)](https://drive.google.com/file/d/1IH6zX-BBfv3XBVY5i-V-4oTLTj39Fsa6/view?usp=sharing)
+- Watercolor / [Download Webpage](https://github.com/naoto0804/cross-domain-detection/tree/master/datasets)
+- Sim10k / [Download Webpage](https://fcav.engin.umich.edu/projects/driving-in-the-matrix)
+
+Make sure that all downloaded datasets are located in the ```./dataset``` folder. After preparing the datasets, you will have the following file structure:
+
+```bash
+LPLD
+...
+├── dataset
+│   └── foggy
+│   └── cityscape
+│   └── clipart
+│   └── watercolor
+...
+```
+Make sure that all dataset fit the format of PASCAL_VOC. For example, the dataset foggy is stored as follows:
+
+```bash
+$ cd ./dataset/foggy/VOC2007/
+$ ls
+Annotations  ImageSets  JPEGImages
+$ cat ImageSets/Main/test_t.txt
+target_munster_000157_000019_leftImg8bit_foggy_beta_0.02
+target_munster_000124_000019_leftImg8bit_foggy_beta_0.02
+target_munster_000110_000019_leftImg8bit_foggy_beta_0.02
+.
+.
+```
+
+---
+
+### Pretrained weights
+
+- Source Model / [Download Link](https://drive.google.com/drive/folders/1-8AbGhESrpKlg1erctbxTcwAqJ8QHDoH?usp=sharing)
+- Ours
+  - Cityscapes to FoggyCityscapes / [Download Link]()
+  - Sim10k to Cityscapes / [Download Link]()
+  - Kitti to Cityscapes / [Download Link]()
+  - VOC to Clipart / [Download Link]()
+  - VOC to watercolor / [Download Link]()
