@@ -91,8 +91,8 @@ CUDA_VISIBLE_DEVICES=$GPU_ID python tools/test_main.py --eval-only \
 We provide visualization code with example.jpg. We use our trained model to detect foggy cityscapes in the image.
 
 <p align="center">
-  <img src="example.jpg", width="400">
-  <img src="output.jpg", width="400">
+  <img src="https://github.com/junia3/LPLD/assets/79881119/b4b98638-1681-4f21-8181-7cdce83b095a", width="400">
+  <img src="https://github.com/junia3/LPLD/assets/79881119/9441055b-1f04-49a0-a78e-117925936917", width="400">
 </p>
 
 ```bash
