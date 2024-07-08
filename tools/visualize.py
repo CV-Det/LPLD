@@ -35,9 +35,9 @@ def visualize(args, model):
         pred_score = outputs[0]["instances"][idx].scores.item()
         if pred_score >= 0.5:
             bbox = pred_box.numpy().astype(int)[0]
-            cv2.rectangle(img, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (0, 0, 255), 2)
+            cv2.rectangle(img, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (255, 0, 0), 2)
 
-    cv2.imwrite("output.jpg", img)
+    cv2.imwrite("output.jpg", cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
     return
 
 def setup(args):
@@ -76,3 +76,4 @@ if __name__ == "__main__":
         dist_url=args.dist_url,
         args=(args,),
     )
+
