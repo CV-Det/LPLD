@@ -133,3 +133,10 @@ CUDA_VISIBLE_DEVICES=$GPU_ID python tools/test_main.py --eval-only \
   <br>
   <img src="https://github.com/junia3/LPLD/assets/79881119/f8f699d3-ca8d-40a5-87f4-1ec7665d7c38", width="700">
 </p>
+
+---
+
+## Citation
+
+---
+
