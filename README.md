@@ -32,10 +32,10 @@ python -m pip install -e LPLD
 ---
 
 ## Dataset preparation
-- Cityscapes, FoggyCityscapes / [Download Webpage](https://www.cityscapes-dataset.com/) / [Direct Download (preprocessed)](https://drive.google.com/file/d/1A2ak_gjkSIRB9SMANGBGTmRoyB10TTdB/view?usp=sharing)
+- Cityscapes, FoggyCityscapes / [Download Webpage](https://www.cityscapes-dataset.com/) / [Google drive (preprocessed)](https://drive.google.com/file/d/1A2ak_gjkSIRB9SMANGBGTmRoyB10TTdB/view?usp=sharing)
 - PASCAL_VOC / [Download Webpage](https://github.com/rbgirshick/py-faster-rcnn#beyond-the-demo-installation-for-training-and-testing-models)
-- Clipart / [Download Webpage](https://github.com/naoto0804/cross-domain-detection/tree/master/datasets) / [Direct Download (preprocessed)](https://drive.google.com/file/d/1IH6zX-BBfv3XBVY5i-V-4oTLTj39Fsa6/view?usp=sharing)
-- Watercolor / [Download Webpage](https://github.com/naoto0804/cross-domain-detection/tree/master/datasets) / [Direct Download (preprocessed)](https://drive.google.com/file/d/1H-zIRNZx3mU4SuG30PG5KrgmKw-5v9LY/view?usp=sharing)
+- Clipart / [Download Webpage](https://github.com/naoto0804/cross-domain-detection/tree/master/datasets) / [Google drive (preprocessed)](https://drive.google.com/file/d/1IH6zX-BBfv3XBVY5i-V-4oTLTj39Fsa6/view?usp=sharing)
+- Watercolor / [Download Webpage](https://github.com/naoto0804/cross-domain-detection/tree/master/datasets) / [Google drive (preprocessed)](https://drive.google.com/file/d/1H-zIRNZx3mU4SuG30PG5KrgmKw-5v9LY/view?usp=sharing)
 - Sim10k / [Download Webpage](https://fcav.engin.umich.edu/projects/driving-in-the-matrix)
 
 Make sure that all downloaded datasets are located in the ```./dataset``` folder. After preparing the datasets, you will have the following file structure:
@@ -68,20 +68,20 @@ target_munster_000110_000019_leftImg8bit_foggy_beta_0.02
 
 ## Execution
 
-- Download source models from the [Link](https://drive.google.com/drive/folders/1-8AbGhESrpKlg1erctbxTcwAqJ8QHDoH?usp=sharing).
+Before training, please download source models from the [google drive link](https://drive.google.com/drive/folders/1-8AbGhESrpKlg1erctbxTcwAqJ8QHDoH?usp=sharing).
 
 ### Train models
 
 ```bash
 CUDA_VISIBLE_DEVICES=$GPU_ID python tools/train_main.py \ 
---config-file configs/sfda/sfda_lpld.yaml --model-dir ./source_model/cityscape_baseline/model_final.pth
+--config-file configs/sfda/sfda_city2foggy.yaml --model-dir ./source_model/cityscape_baseline/model_final.pth
 ```
 
 ### Test models
 
 ```bash
 CUDA_VISIBLE_DEVICES=$GPU_ID python tools/test_main.py --eval-only \ 
---config-file configs/sfda/sfda_lpld.yaml --model-dir $WEIGHT_LOCATION
+--config-file configs/sfda/sfda_city2foggy.yaml --model-dir $WEIGHT_LOCATION
 ```
 
 ---
@@ -89,37 +89,54 @@ CUDA_VISIBLE_DEVICES=$GPU_ID python tools/test_main.py --eval-only \
 ## Results
 ### Low Confidence Pseudo-Label Extraction
 
-<p align="center">
+<p align="left">
   <img src="https://github.com/junia3/LPLD/assets/79881119/48a4d97f-c6ca-46f3-8d22-a35af345059b", width="700">
   <br>
   <img src="https://github.com/junia3/LPLD/assets/79881119/4c78e21c-2768-4206-b059-3f2ce7738b73", width="700">
 </p>
 
+### Pretrained weights (LPLD)
+
+|Source|Target|Download Link|
+|:---:|:---:|:---:|
+|Cityscapes|FoggyCityscapes|[Google drive](https://drive.google.com/file/d/1dCRI95VUjB8GDdgd1eLRX1P-uQZVI_Lg/view?usp=sharing)|
+|Kitti|Cityscapes|[Google drive](https://drive.google.com/file/d/1HiDibBDigbNcL7XfghLW87r5MufArutN/view?usp=sharing)|
+|Sim10k|Cityscapes|[Google drive](https://drive.google.com/file/d/1-M0hKURPslgI9XtniVzZULi_SHkRud6D/view?usp=sharing)|
+|Pascal VOC|Watercolor|[Google drive](https://drive.google.com/file/d/1ShvXTtsaoxAVJrdu3EXpM-ao33jc5ChQ/view?usp=sharing)|
+|Pascal VOC|Clipart|[Google drive](https://drive.google.com/file/d/1y6woJCPTlaZgPrF3nv36MIK0nn8Yy28d/view?usp=sharing)|
+
 ### Cityscapes to FoggyCityscapes
-<p align="center">
+<p align="left">
   <img src="https://github.com/junia3/LPLD/assets/79881119/4269a6a0-83ad-4d64-b8b7-576f29254bf0", width="700">
 </p>
 
 ### Kitti to Cityscapes
-<p align="center">
+<p align="left">
   <img src="https://github.com/junia3/LPLD/assets/79881119/bb518dba-5c03-4d00-945e-5b4a6aad6bbd", width="700">
 </p>
 
 ### Sim10k to Cityscapes
-<p align="center">
+<p align="left">
   <img src="https://github.com/junia3/LPLD/assets/79881119/c2b768e9-1bb8-4faa-8838-06ee917283cf", width="700">
 </p>
 
 ### VOC to Watercolor
-<p align="center">
+<p align="left">
   <img src="https://github.com/junia3/LPLD/assets/79881119/1c338dc8-116a-46f4-b8c8-42066e4fe3e8", width="700">
   <br>
   <img src="https://github.com/junia3/LPLD/assets/79881119/d97f58c3-2490-4562-b9a1-e7ec3a667201", width="700">
 </p>
 
 ### VOC to Clipart
-<p align="center">
+<p align="left">
   <img src="https://github.com/junia3/LPLD/assets/79881119/03244ab9-8504-4e78-9c74-bb898cfd3aea", width="700">
   <br>
   <img src="https://github.com/junia3/LPLD/assets/79881119/f8f699d3-ca8d-40a5-87f4-1ec7665d7c38", width="700">
 </p>
+
+---
+
+## Citation
+
+---
+
