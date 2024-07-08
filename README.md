@@ -28,3 +28,24 @@ cd ..
 python -m pip install -e LPLD
 
 ```
+
+---
+
+### Dataset preparation
+- Cityscapes, Foggy cityscapes / [Download Webpage](https://www.cityscapes-dataset.com/) / [Direct Download (preprocessed)]()
+- PASCAL_VOC / [Download Webpage](https://github.com/rbgirshick/py-faster-rcnn#beyond-the-demo-installation-for-training-and-testing-models) / [Direct Download (preprocessed)]()
+- Watercolor, Clipart / [Download Webpage](https://github.com/naoto0804/cross-domain-detection/tree/master/datasets) / [Direct Download (preprocessed)]()
+
+Make sure that all downloaded datasets are located in the ```./dataset``` folder. All dataset codes are written to fit the format of PASCAL_VOC.
+After preparing the datasets, you will have the following file structure:
+
+```bash
+LPLD
+...
+├── dataset
+│   └── foggy
+│   └── cityscape
+│   └── clipart
+│   └── watercolor
+...
+```
