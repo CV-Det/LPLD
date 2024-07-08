@@ -86,6 +86,24 @@ CUDA_VISIBLE_DEVICES=$GPU_ID python tools/test_main.py --eval-only \
 
 ---
 
+## Visualize
+
+We provide visualization code with example.jpg. We use our trained model to detect foggy cityscapes in the image.
+
+<p align="center">
+  <img src="example.jpg", width="400">
+  <img src="output.jpg", width="400">
+</p>
+
+```bash
+CUDA_VISIBLE_DEVICES=$GPU_ID python tools/visualize.py \
+--config-file configs/sfda/sfda_city2foggy.yaml \
+--model-dir $WEIGHT_LOCATION \
+--img_path $SAMPLE_LOCATION
+```
+
+---
+
 ## Results
 ### Low Confidence Pseudo-Label Extraction
 
