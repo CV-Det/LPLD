@@ -66,12 +66,19 @@ target_munster_000110_000019_leftImg8bit_foggy_beta_0.02
 
 ---
 
-### Pretrained weights
+### Execution
 
-- Source Model / [Download Link](https://drive.google.com/drive/folders/1-8AbGhESrpKlg1erctbxTcwAqJ8QHDoH?usp=sharing)
-- Ours
-  - Cityscapes to FoggyCityscapes / [Download Link]()
-  - Sim10k to Cityscapes / [Download Link]()
-  - Kitti to Cityscapes / [Download Link]()
-  - VOC to Clipart / [Download Link]()
-  - VOC to watercolor / [Download Link]()
+- Downaload source models / [Download Link](https://drive.google.com/drive/folders/1-8AbGhESrpKlg1erctbxTcwAqJ8QHDoH?usp=sharing)
+- Train models
+
+```bash
+CUDA_VISIBLE_DEVICES=$GPU_ID python tools/train_main.py \ 
+--config-file configs/sfda/sfda_lpld.yaml --model-dir ./source_model/cityscape_baseline/model_final.pth
+```
+
+- Test models
+
+```bash
+CUDA_VISIBLE_DEVICES=$GPU_ID python tools/test_main.py --eval-only \ 
+--config-file configs/sfda/sfda_lpld.yaml --model-dir $WEIGHT_LOCATION
+```
