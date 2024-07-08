@@ -1,6 +1,6 @@
-# LPLD (Low-confidence Pseudo-Label Distillation) (ECCV 2024)
+# 🏷 LPLD (Low-confidence Pseudo-Label Distillation) (ECCV 2024)
 
-Official repository for ```Enhancing Source-Free Domain Adaptive Object Detection with Low-Confidence Pseudo-Label Distillation```, accepted to ```ECCV 2024```.
+This is an official code implementation repository for ```Enhancing Source-Free Domain Adaptive Object Detection with Low-Confidence Pseudo-Label Distillation```, accepted to ```ECCV 2024```.
 
 <p align="center">
   <img src="https://github.com/junia3/LPLD/assets/79881119/1f217e54-4a3b-4be5-abdb-c924af1026f1">
@@ -35,7 +35,7 @@ python -m pip install -e LPLD
 - Cityscapes, FoggyCityscapes / [Download Webpage](https://www.cityscapes-dataset.com/) / [Direct Download (preprocessed)](https://drive.google.com/file/d/1A2ak_gjkSIRB9SMANGBGTmRoyB10TTdB/view?usp=sharing)
 - PASCAL_VOC / [Download Webpage](https://github.com/rbgirshick/py-faster-rcnn#beyond-the-demo-installation-for-training-and-testing-models)
 - Clipart / [Download Webpage](https://github.com/naoto0804/cross-domain-detection/tree/master/datasets) / [Direct Download (preprocessed)](https://drive.google.com/file/d/1IH6zX-BBfv3XBVY5i-V-4oTLTj39Fsa6/view?usp=sharing)
-- Watercolor / [Download Webpage](https://github.com/naoto0804/cross-domain-detection/tree/master/datasets)
+- Watercolor / [Download Webpage](https://github.com/naoto0804/cross-domain-detection/tree/master/datasets) / [Direct Download (preprocessed)](https://drive.google.com/file/d/1H-zIRNZx3mU4SuG30PG5KrgmKw-5v9LY/view?usp=sharing)
 - Sim10k / [Download Webpage](https://fcav.engin.umich.edu/projects/driving-in-the-matrix)
 
 Make sure that all downloaded datasets are located in the ```./dataset``` folder. After preparing the datasets, you will have the following file structure:
@@ -68,7 +68,7 @@ target_munster_000110_000019_leftImg8bit_foggy_beta_0.02
 
 ## Execution
 
-- Downaload source models / [Download Link](https://drive.google.com/drive/folders/1-8AbGhESrpKlg1erctbxTcwAqJ8QHDoH?usp=sharing)
+- Download source models from the [Link](https://drive.google.com/drive/folders/1-8AbGhESrpKlg1erctbxTcwAqJ8QHDoH?usp=sharing).
 
 ### Train models
 
