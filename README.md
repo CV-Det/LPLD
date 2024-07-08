@@ -156,5 +156,16 @@ CUDA_VISIBLE_DEVICES=$GPU_ID python tools/visualize.py \
 
 ## Citation
 
+<details>
+<summary>Open</summary>
+  
+```bibtex
+TBD
+```
+
+</details>
+
 ---
 
+## Contact
+If you have any issue with code or paper, feel free to contact [```jun_yonsei@yonsei.ac.kr```](mailto:jun_yonsei@yonsei.ac.kr).
