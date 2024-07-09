@@ -68,6 +68,9 @@ target_munster_000110_000019_leftImg8bit_foggy_beta_0.02
 
 ## Execution
 
+> Currently, we only provide code and results with ResNet-50 backbone baselines.
+> We are planning to add VGG-16 backbone baselines and code.
+
 Before training, please download source models from the [google drive link](https://drive.google.com/drive/folders/1-8AbGhESrpKlg1erctbxTcwAqJ8QHDoH?usp=sharing).
 
 ### Train models
