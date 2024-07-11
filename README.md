@@ -68,6 +68,9 @@ target_munster_000110_000019_leftImg8bit_foggy_beta_0.02
 
 ## Execution
 
+> Currently, we only provide code and results with ResNet-50 backbone baselines.
+> We are planning to add VGG-16 backbone baselines and code.
+
 Before training, please download source models from the [google drive link](https://drive.google.com/drive/folders/1-8AbGhESrpKlg1erctbxTcwAqJ8QHDoH?usp=sharing).
 
 ### Train models
@@ -88,11 +91,11 @@ CUDA_VISIBLE_DEVICES=$GPU_ID python tools/test_main.py --eval-only \
 
 ## Visualize
 
-We provide visualization code with example.jpg. We use our trained model to detect foggy cityscapes in the image.
+We provide visualization code. We use our trained model to detect foggy cityscapes in the ```example image```.
 
 <p align="center">
-  <img src="example.jpg", width="400">
-  <img src="output.jpg", width="400">
+  <img src="https://github.com/junia3/LPLD/assets/79881119/b4b98638-1681-4f21-8181-7cdce83b095a", width="400">
+  <img src="https://github.com/junia3/LPLD/assets/79881119/9441055b-1f04-49a0-a78e-117925936917", width="400">
 </p>
 
 ```bash
@@ -156,5 +159,16 @@ CUDA_VISIBLE_DEVICES=$GPU_ID python tools/visualize.py \
 
 ## Citation
 
+<details>
+<summary>Open</summary>
+  
+```bibtex
+TBD
+```
+
+</details>
+
 ---
 
+## Contact
+If you have any issue with code or paper, feel free to contact [```jun_yonsei@yonsei.ac.kr```](mailto:jun_yonsei@yonsei.ac.kr).
