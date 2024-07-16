@@ -259,7 +259,7 @@ def train_sfda(cfg, model_student, model_teacher, args, resume=False):
 
     data_loader = build_detection_train_loader(cfg)
 
-    total_epochs = 20
+    total_epochs = 10
     len_data_loader = len(data_loader.dataset.dataset.dataset)
     start_iter, max_iter = 0, len_data_loader
     max_sf_da_iter = total_epochs*max_iter
@@ -279,7 +279,7 @@ def train_sfda(cfg, model_student, model_teacher, args, resume=False):
                 with torch.no_grad():
                     _, teacher_features, teacher_proposals, teacher_results = model_teacher(data, mode="train", iteration=iteration)
                 teacher_pseudo_results, _ = process_pseudo_label(teacher_results, 0.7, "roih", "thresholding")
-                loss_dict, _, _, _ = model_student(data, cfg, model_teacher, teacher_features, teacher_proposals, teacher_pseudo_results, mode="train")
+                loss_dict = model_student(data, cfg, model_teacher, teacher_features, teacher_proposals, teacher_pseudo_results, mode="train")
                 losses = sum(loss_dict.values())
 
                 assert torch.isfinite(losses).all(), loss_dict

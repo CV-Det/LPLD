@@ -280,7 +280,6 @@ class FastRCNNOutputLayers(nn.Module):
         proposal_deltas = self.bbox_pred(x)
         return scores, proposal_deltas
 
-
     def losses(self, predictions, proposals):
         """
         Args:
@@ -315,14 +314,33 @@ class FastRCNNOutputLayers(nn.Module):
         else:
             proposal_boxes = gt_boxes = torch.empty((0, 4), device=proposal_deltas.device)
 
-        losses = {
-            "loss_cls": cross_entropy(scores, gt_classes, reduction="mean"),
-            "loss_box_reg": self.box_reg_loss(
-                proposal_boxes, gt_boxes, proposal_deltas, gt_classes
-            ),
-        }
-        return {k: v * self.loss_weight.get(k, 1.0) for k, v in losses.items()}
+        if len(proposals) and proposals[0].has("gt_similarity"):
+            gt_scores = (
+                cat([p.gt_scores for p in proposals], dim=0) if len(proposals) else torch.empty(0)
+            )
+            idx_foreground = (gt_classes < self.num_classes)
+            loss_kd = torch.FloatTensor([0]).cuda()
+            if sum(idx_foreground) > 0:
+                pred_probs = F.softmax(scores[idx_foreground], dim=1)
+                gt_probs = F.softmax(gt_scores[idx_foreground], dim=1)
+                gt_probs = torch.cat([gt_probs, 1e-9*torch.ones(gt_probs.size(0), 1).cuda()], dim=1)
+                weighted_loss = gt_probs * (gt_probs.log() - pred_probs.log())
+                weights= proposals[0].gt_similarity[idx_foreground]
+                loss_kd += 0.01*(weighted_loss.sum(dim=1)*weights).mean()
 
+            losses = {
+                "loss_kd": loss_kd
+            }
+
+        else:
+            losses = {
+                "loss_cls": cross_entropy(scores, gt_classes, reduction="mean"),
+                "loss_box_reg": self.box_reg_loss(
+                    proposal_boxes, gt_boxes, proposal_deltas, gt_classes
+                ),
+            }
+        return {k: v * self.loss_weight.get(k, 1.0) for k, v in losses.items()}
+        
     def box_reg_loss(self, proposal_boxes, gt_boxes, pred_deltas, gt_classes):
         """
         Args:

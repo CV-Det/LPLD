@@ -126,25 +126,12 @@ class student_sfda_RCNN(nn.Module):
             storage.put_image(vis_name, vis_img)
             break  # only visualize one image in a batch
 
-    def KD_loss(self, student_logits, teacher_logits, weight=None):
-        teacher_probs = F.softmax(teacher_logits, dim=1)
-        student_probs = F.softmax(student_logits, dim=1)
-        teacher_probs = torch.cat([teacher_probs, 1e-9*torch.ones(teacher_probs.size(0), 1).cuda()], dim=1)
-        KD_loss = teacher_probs * (teacher_probs.log() - student_probs.log())
-        if weight is not None:
-            KD_loss = (KD_loss.sum(1)*weight).sum()/student_probs.size(0)
-        else:
-            KD_loss = KD_loss.sum()/student_probs.size(0)
-
-        return KD_loss
-
     def NormalizeData(self, data):
         return (data - np.min(data)) / (np.max(data) - np.min(data))
 
     def forward(self, batched_inputs: List[Dict[str, torch.Tensor]], cfg=None, model_teacher=None,
                 t_features=None, t_proposals=None, t_results=None, mode="test", ablation=1):
         
-        info = {}
         if not self.training and mode == "test":
             return self.inference(batched_inputs)
 
@@ -167,7 +154,6 @@ class student_sfda_RCNN(nn.Module):
         s_box_features = self.roi_heads._shared_roi_transform([features['res4']], [t_proposals[0].proposal_boxes]) #s_box_features = 300,2048,7,7
         s_box_features_mean = s_box_features.mean(dim=[2, 3])
         s_box_features_norm = F.normalize(s_box_features_mean, dim=1)
-        s_roih_logits = self.roi_heads.box_predictor(s_box_features_mean)
         
         t_box_features = model_teacher.roi_heads._shared_roi_transform([t_features['res4']], [t_proposals[0].proposal_boxes])
         t_box_features_mean = t_box_features.mean(dim=[2, 3])
@@ -175,8 +161,6 @@ class student_sfda_RCNN(nn.Module):
         t_roih_logits = model_teacher.roi_heads.box_predictor(t_box_features_mean)
 
         c_similarity = F.cosine_similarity(s_box_features_norm.detach(), t_box_features_norm.detach(), dim=1)
-        info["t_logits"] = t_roih_logits[0]
-        info["s_logits"] = s_roih_logits[0]
         t_roih_classes = t_roih_logits[0].argmax(dim=1)
 
         t_proposal_boxes = cat([p.proposal_boxes.tensor for p in t_proposals], dim=0)
@@ -194,16 +178,11 @@ class student_sfda_RCNN(nn.Module):
         iou_matrix = pairwise_iou(t_box_boxes, t_result_boxes)
 
         if iou_matrix.shape[1] == 0:
-            return losses, None, t_box_boxes, info
+            return losses
 
         t_indices = torch.nonzero(torch.max(iou_matrix, dim=1).values <= 0.4).flatten()
         if t_indices.nelement() == 0:
-            return losses, None, t_box_boxes, info
-
-        info["t_indices"] = t_indices
-        info["s_features"] = s_box_features_norm[t_indices].detach().cpu().numpy()
-        info["t_features"] = t_box_features_norm[t_indices].detach().cpu().numpy()
-        info["c_similarity"] = c_similarity
+            return losses
 
         t_softmax_w_bg = F.softmax(t_roih_logits[0][t_indices], dim=1)
         t_softmax_wo_bg = F.softmax(t_roih_logits[0][t_indices][:, :-1], dim=1)
@@ -212,14 +191,34 @@ class student_sfda_RCNN(nn.Module):
         t_indices_filtered = t_indices[(wo_bg_max >= 0.9) & (w_bg_prob <= 0.99)]
 
         if t_indices_filtered.nelement() == 0:
-            return losses, t_indices, t_box_boxes, info
-    
-        info["t_indices_filtered"] = t_indices_filtered
-        losses["hard_kd"] = 0.1*self.KD_loss(s_roih_logits[0][t_indices_filtered],
-                                            t_roih_logits[0][t_indices_filtered][:, :-1],
-                                            weight=1-c_similarity[t_indices_filtered])
+            return losses
 
-        return losses, t_indices, t_box_boxes, info
+        additional_box = self._process_pseudo_label(t_proposals,
+                                                    t_indices_filtered,
+                                                    t_box_boxes,
+                                                    t_roih_logits,
+                                                    c_similarity)
+
+        _, detector_losses_hard = self.roi_heads(images, features, proposals, additional_box)
+        losses["loss_kd"] = detector_losses_hard["loss_kd"]
+
+        return losses
+
+    def _process_pseudo_label(self, t_proposals, t_indices_filtered, t_boxes, t_logits, c_similarity):
+        list_instances = []
+        image_shape = t_proposals[0].image_size
+        new_proposal_inst = Instances(image_shape)
+        new_bbox_loc = t_boxes.tensor[t_indices_filtered]        
+        new_bboxes = Boxes(new_bbox_loc)
+
+        new_proposal_inst.gt_boxes = new_bboxes
+        new_proposal_inst.gt_classes = t_logits[0][t_indices_filtered][:, :-1].argmax(dim=1)
+        
+        new_proposal_inst.gt_scores = t_logits[0][t_indices_filtered][:, :-1]
+        new_proposal_inst.gt_similarity = c_similarity[t_indices_filtered]
+        list_instances.append(new_proposal_inst)
+
+        return list_instances
 
     def inference(
         self,
