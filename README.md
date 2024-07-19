@@ -1,5 +1,9 @@
 # LPLD (Low-confidence Pseudo Label Distillation) (ECCV 2024)
 
+<a href="https://arxiv.org/abs/2407.13524">
+  <img src="https://img.shields.io/badge/arXiv-2407.13524-0096c7.svg?style=plastic" alt="arXiv">
+</a>
+
 This is an official code implementation repository for ```Enhancing Source-Free Domain Adaptive Object Detection with Low-confidence Pseudo Label Distillation```, accepted to ```ECCV 2024```.
 
 <p align="center">
