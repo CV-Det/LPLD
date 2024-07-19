@@ -9,7 +9,6 @@ from detectron2.config import configurable
 from detectron2.data.detection_utils import convert_image_to_rgb
 from detectron2.structures import ImageList, Instances
 from detectron2.utils.events import get_event_storage
-from detectron2.utils.logger import log_first_n
 
 from ..backbone import Backbone, build_backbone
 from ..postprocessing import detector_postprocess

@@ -1,13 +1,8 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
-import logging
 import numpy as np
 from typing import Dict, List, Optional, Tuple
 import torch
 from torch import nn
-import matplotlib.pyplot as plt
-import seaborn as sns
-import random
-
 
 from detectron2.config import configurable
 from detectron2.data.detection_utils import convert_image_to_rgb
@@ -21,10 +16,7 @@ from ..proposal_generator import build_proposal_generator
 from ..roi_heads import build_roi_heads
 from .build import META_ARCH_REGISTRY
 
-import pdb
-import cv2
 import torch.nn.functional as F
-from matplotlib import pyplot as plt
 
 __all__ = ["student_sfda_RCNN"]
 
@@ -151,18 +143,22 @@ class student_sfda_RCNN(nn.Module):
         losses.update(detector_losses)
         losses.update(proposal_losses)
 
+        # Extract features from the student and teacher models
         s_box_features = self.roi_heads._shared_roi_transform([features['res4']], [t_proposals[0].proposal_boxes]) #s_box_features = 300,2048,7,7
         s_box_features_mean = s_box_features.mean(dim=[2, 3])
         s_box_features_norm = F.normalize(s_box_features_mean, dim=1)
+        s_roih_logits = self.roi_heads.box_predictor(s_box_features_mean)
         
         t_box_features = model_teacher.roi_heads._shared_roi_transform([t_features['res4']], [t_proposals[0].proposal_boxes])
         t_box_features_mean = t_box_features.mean(dim=[2, 3])
         t_box_features_norm = F.normalize(t_box_features_mean, dim=1)
         t_roih_logits = model_teacher.roi_heads.box_predictor(t_box_features_mean)
 
+        # Compute the cosine similarity between the student and teacher features
         c_similarity = F.cosine_similarity(s_box_features_norm.detach(), t_box_features_norm.detach(), dim=1)
         t_roih_classes = t_roih_logits[0].argmax(dim=1)
 
+        # Compute the LPL loss
         t_proposal_boxes = cat([p.proposal_boxes.tensor for p in t_proposals], dim=0)
         t_boxes = model_teacher.roi_heads.box_predictor.box2box_transform.apply_deltas(t_roih_logits[1], t_proposal_boxes)
         t_box = torch.zeros(t_proposal_boxes.shape[0], 4).cuda()
@@ -193,39 +189,30 @@ class student_sfda_RCNN(nn.Module):
         if t_indices_filtered.nelement() == 0:
             return losses
 
-        additional_box = self._process_pseudo_label(t_proposals,
-                                                    t_indices_filtered,
-                                                    t_box_boxes,
-                                                    t_roih_logits,
-                                                    c_similarity)
-
-        _, detector_losses_hard = self.roi_heads(images, features, proposals, additional_box)
-        losses["loss_kd"] = detector_losses_hard["loss_kd"]
+        losses["lpl_kl"] = self._kl_divergence(s_roih_logits[0][t_indices_filtered],
+                                               t_roih_logits[0][t_indices_filtered][:, :-1],
+                                               weight = 1-c_similarity[t_indices_filtered])
 
         return losses
 
-    def _process_pseudo_label(self, t_proposals, t_indices_filtered, t_boxes, t_logits, c_similarity):
-        list_instances = []
-        image_shape = t_proposals[0].image_size
-        new_proposal_inst = Instances(image_shape)
-        new_bbox_loc = t_boxes.tensor[t_indices_filtered]        
-        new_bboxes = Boxes(new_bbox_loc)
+    def _kl_divergence(self, student_logits, teacher_logits, weight=None):
+        teacher_probs = F.softmax(teacher_logits, dim=1)
+        student_probs = F.softmax(student_logits, dim=1)
+        teacher_probs = torch.cat([teacher_probs, 1e-10*torch.ones(teacher_probs.size(0), 1).cuda()], dim=1)
+        KL_loss = teacher_probs * (teacher_probs.log() - student_probs.log())
+        if weight is not None:
+            KL_loss = (KL_loss.sum(1)*weight).sum()/student_probs.size(0)
+        else:
+            KL_loss = KL_loss.sum()/student_probs.size(0)
 
-        new_proposal_inst.gt_boxes = new_bboxes
-        new_proposal_inst.gt_classes = t_logits[0][t_indices_filtered][:, :-1].argmax(dim=1)
-        
-        new_proposal_inst.gt_scores = t_logits[0][t_indices_filtered][:, :-1]
-        new_proposal_inst.gt_similarity = c_similarity[t_indices_filtered]
-        list_instances.append(new_proposal_inst)
-
-        return list_instances
+        return KL_loss/10
 
     def inference(
         self,
         batched_inputs: List[Dict[str, torch.Tensor]],
         detected_instances: Optional[List[Instances]] = None,
         do_postprocess: bool = True,
-    ):
+        ):
         assert not self.training
 
         images = self.preprocess_image(batched_inputs)
@@ -255,7 +242,6 @@ class student_sfda_RCNN(nn.Module):
         """
         if mode == "train":
             images = [x["image_strong"].to(self.device) for x in batched_inputs]
-            #self.image_vis(images)
             images = [(x - self.pixel_mean) / self.pixel_std for x in images]
             images = ImageList.from_tensors(images, self.backbone.size_divisibility)
         elif mode == "test":
